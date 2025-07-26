@@ -103,8 +103,162 @@ Then('click on chellenging dom', async function () {
     await getPage().getByRole('link', { name: 'Challenging DOM' }).click();
 });
 
-Then('read the diceret in row 4 i guess, should way Phaedrum3', async function () {
+Then('read the diceret in row 4 i guess, should say Phaedrum3', async function () {
     const row3 = getPage().locator('tbody tr').nth(3);
     const diceretRow3 = await row3.locator('td').nth(5).textContent();
     assert.strictEqual(diceretRow3, 'Phaedrum3');    
 });
+
+// Checkboxes --------------------------------------------------------------------------------------------------------------
+
+Then('click on checkboxes', async function () {
+    await getPage().getByRole('link', { name: 'Checkboxes' }).click();
+});
+
+Then('read the current state of the checkboxes', async function () {
+    const checkboxes = getPage().locator('#checkboxes input[type="checkbox"]');
+    const count = await checkboxes.count();
+    for (let i = 0; i < count; i++) {
+        const checkbox = checkboxes.nth(i);
+        const status = await checkbox.isChecked();
+        console.log(`checkbox ${i + 1} is ${status ? 'checked' : 'unchecked'}`);
+    }
+});
+
+Then('click the check boxes', async function () {
+    const checkboxes = getPage().locator('#checkboxes input[type="checkbox"]');
+    const count = await checkboxes.count();
+    for (let i = 0; i < count; i++) {
+        const checkbox = checkboxes.nth(i);
+        await checkbox.click();
+
+    }
+});
+
+Then('just reclick the first one for fun', async function () {
+    await getPage().getByRole('checkbox').first().click();
+});
+
+// Context Menu -------------------------------------------------------------------------------------------------------------
+
+Then('click on context menu', async function () {
+    await getPage().getByRole('link', { name: 'Context Menu' }).click();
+});
+
+Then('right click the box and assert for the context menu for {string}', async function (expectedMessage) {
+    let dialogHandled = false;
+    getPage().once('dialog', async dialog => {
+        dialogHandled = true;
+        assert.strictEqual(dialog.message(), expectedMessage);
+        await dialog.accept();
+    });
+    await getPage().locator('#hot-spot').click({ button: 'right' });
+    await getPage().waitForTimeout(500);
+    assert(dialogHandled, 'Dialog was not handled');
+});
+
+// Digest Authentication -----------------------------------------------------------------------------------------------------
+
+Then('unfortunetly has to be all in one go or its just cuz im a novice so ready the alert then click on digest authentication and enter the login info', async function () {
+    const browser = await chromium.launch({ headless: false });
+    const context = await browser.newContext({
+        httpCredentials: {
+            username: 'admin',
+            password: 'admin'
+        }
+    });
+    const page = await context.newPage();
+    await page.goto('https://the-internet.herokuapp.com/basic_auth');
+    this.page = page;
+    this.context = context;
+    this._basicAuthBrowser = browser;
+});
+
+Then('assert for {string}', async function(expectedMessage) {
+    assert.strictEqual(expectedMessage, 'Congratulations! You must have the proper credentials.');
+});
+
+// Disappearing Elements -----------------------------------------------------------------------------------------------------
+
+Then('click on disappearing elements', async function () {
+    await getPage().getByRole('link', { name: 'Disappearing Elements' }).click();
+});
+
+Then('check and assert for home tab', async function () {
+    const homeTab = await getPage().locator('ul li').nth(0).textContent();
+    assert.strictEqual(homeTab, 'Home');
+});
+
+Then('check and assert for about tab', async function () {
+    const aboutTab = await getPage().locator('ul li').nth(1).textContent();
+    assert.strictEqual(aboutTab, 'About');
+});
+
+Then('check and assert for contact us tab', async function () {
+    const contactUsTab = await getPage().locator('ul li').nth(2).textContent();
+    assert.strictEqual(contactUsTab, 'Contact Us');
+});
+
+Then('check and assert for portfolio tab', async function () {
+    const portfolioTab = await getPage().locator('ul li').nth(3).textContent();
+    assert.strictEqual(portfolioTab, 'Portfolio');
+});
+
+Then('check and assert for gallery tab', async function () {
+    const galleryTab = await getPage().locator('ul li').nth(4).textContent();
+    assert.strictEqual(galleryTab, 'Gallery');
+});
+
+// Drag and Drop ---------------------------------------------------------------------------------------------------------------
+
+Then('click on Drag and Drop', async function () {
+    await getPage().getByRole('link', { name: 'Drag and Drop' }).click();
+});
+
+Then('assert for a then b', async function () {
+    const columns = getPage().locator('.column');
+    const first = (await columns.nth(0).textContent());
+    const second = (await columns.nth(1).textContent());
+    assert.strictEqual(first, 'A');
+    assert.strictEqual(second, 'B');
+});
+
+Then('drag and drop a onto b', async function () {
+    await getPage().locator('#column-a').dragTo(getPage().locator('#column-b'));
+});
+
+Then('assert for b then a', async function () {
+    const columns = getPage().locator('.column');
+    const first = (await columns.nth(0).textContent());
+    const second = (await columns.nth(1).textContent());
+    assert.strictEqual(first, 'B');
+    assert.strictEqual(second, 'A');
+});
+
+// Dropdown --------------------------------------------------------------------------------------------------------------------
+
+Then('click on Dropdown', async function () {
+    await getPage().getByRole('link', { name: 'Dropdown' }).click();
+});
+
+Then('assert for option {string} when page is first loaded in', async function (expectedMessage) {
+    const landingValue = await getPage().locator('#dropdown').inputValue();
+    const landingText = await getPage().locator(`#dropdown option[value="${landingValue}"]`).textContent();
+    assert.strictEqual(landingText, expectedMessage);
+});
+
+Then('select option 2', async function () {
+    await getPage().locator('#dropdown').selectOption('2');
+});
+
+Then('assert for {string} being selected', async function (expectedMessage) {
+    const landingValue = await getPage().locator('#dropdown').inputValue();
+    const landingText = await getPage().locator(`#dropdown option[value="${landingValue}"]`).textContent();
+    assert.strictEqual(landingText, expectedMessage);
+});
+
+// Dynamic Content -------------------------------------------------------------------------------------------------------------
+
+
+
+//npx cucumber-js --name "Disappearing Elements" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty

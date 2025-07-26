@@ -26,27 +26,59 @@ Feature: Herokuapp Feature
 
     Scenario: Challenging DOM
     Then click on chellenging dom
-    Then read the diceret in row 4 i guess, should way Phaedrum3
+    Then read the diceret in row 4 i guess, should say Phaedrum3
 
-    # Scenario: Checkboxes
+    Scenario: Checkboxes
+    Then click on checkboxes
+    Then read the current state of the checkboxes
+    Then click the check boxes
+    Then read the current state of the checkboxes
+    Then just reclick the first one for fun
+    Then read the current state of the checkboxes
 
+    Scenario: Context Menu
+    Then click on context menu
+    Then right click the box and assert for the context menu for "You selected a context menu"
 
-    # Scenario: Context Menu
+    Scenario: Digest Authentication
+    Then unfortunetly has to be all in one go or its just cuz im a novice so ready the alert then click on digest authentication and enter the login info
+    Then assert for "Congratulations! You must have the proper credentials."
 
+#--------------------------------------------------------------------
+    Scenario: Home tab is present
+    Then click on disappearing elements
+    Then check and assert for home tab
 
-    # Scenario: Digest Authentication
+    Scenario: About tab is present
+    Then click on disappearing elements
+    Then check and assert for about tab
 
+    Scenario: Contact Us tab is present
+    Then click on disappearing elements
+    Then check and assert for contact us tab
 
-    # Scenario: Disappearing Elements
+    Scenario: Portfolio tab is present
+    Then click on disappearing elements
+    Then check and assert for portfolio tab
 
+    Scenario: Gallery tab is present
+    Then click on disappearing elements
+    Then check and assert for gallery tab
 
-    # Scenario: Drag and Drop
+    Scenario: Drag and Drop
+    Then click on Drag and Drop
+    Then assert for a then b
+    Then drag and drop a onto b
+    Then assert for b then a
+#----------------------------------------------------------------------
 
+    Scenario: Dropdown
+    Then click on Dropdown
+    Then assert for option "Please select an option" when page is first loaded in
+    Then select option 2
+    Then assert for "Option 2" being selected
 
-    # Scenario: Dropdown
-
-
-    # Scenario: Dynamic Content
+    Scenario: Dynamic Content
 
 
     # Scenario: Dynamic Controls
