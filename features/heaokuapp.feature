@@ -64,13 +64,13 @@ Feature: Herokuapp Feature
     Scenario: Gallery tab is present
     Then click on disappearing elements
     Then check and assert for gallery tab
+#--------------------------------------------------------------------
 
     Scenario: Drag and Drop
     Then click on Drag and Drop
     Then assert for a then b
     Then drag and drop a onto b
     Then assert for b then a
-#----------------------------------------------------------------------
 
     Scenario: Dropdown
     Then click on Dropdown
@@ -79,7 +79,10 @@ Feature: Herokuapp Feature
     Then assert for "Option 2" being selected
 
     Scenario: Dynamic Content
-
+    Then click on Dynamic Content
+    Then check for any broken images
+    Then check for broken text
+    Then just to flex list out all image icons by names 
 
     # Scenario: Dynamic Controls
 

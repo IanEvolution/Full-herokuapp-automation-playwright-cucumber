@@ -6,6 +6,7 @@ const { get } = require('http');
 const { chromium } = require('playwright');
 
 // A/B testing --------------------------------------------------------------------------------------------------------------
+
 Then('click on AB Testing', async function () {
     await getPage().getByRole('link', { name: 'A/B Testing' }).click();
 });
@@ -17,6 +18,7 @@ Then('check the heading', async function () {
 });
 
 // Add/Remove Elements ------------------------------------------------------------------------------------------------------
+
 Then('click on add remove elements', async function () {
     await getPage().getByRole('link', { name: 'Add/Remove Elements' }).click();
 });
@@ -50,6 +52,7 @@ Then('see if there are 3 elements', async function () {
 });
 
 // Basic Auth --------------------------------------------------------------------------------------------------------------
+
 Then('click on basic auth', async function () {
     await getPage().getByRole('link', { name: 'Basic Auth' }).click();
 });
@@ -92,7 +95,7 @@ Then('check for broken images', async function () {
         const image = await images.nth(i);
         const width = await image.evaluate(img => img.naturalWidth)
         if (width === 0) {
-            console.log(`image: ${i + 1} is broken`);
+            console.log('\x1b[31m%s\x1b[0m', `image: ${i + 1} is broken`);
         }
     }
 });
@@ -259,6 +262,56 @@ Then('assert for {string} being selected', async function (expectedMessage) {
 
 // Dynamic Content -------------------------------------------------------------------------------------------------------------
 
+Then('click on Dynamic Content', async function () {
+    await getPage().getByRole('link', { name: 'Dynamic Content' }).click();
+});
 
+Then('check for any broken images', async function () {
+    const images = getPage().locator('.large-2 img');
+    const count = await images.count();
+    await getPage().waitForTimeout(1000);
+    console.log('');
+    for (let i = 0; i < count; i++) {
+        const image = images.nth(i);
+        const width = await image.evaluate(img => img.naturalWidth);
+        //console.log(width);
+        if (width === 0) {
+            console.log('\x1b[31m%s\x1b[0m', `image ${i + 1} is broken`);
+        }
+    }
+});
 
-//npx cucumber-js --name "Disappearing Elements" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+Then('check for broken text', async function () {
+    const textBlocks = getPage().locator('.large-10');
+    const count = await textBlocks.count();
+    for (let i = 1; i < count; i++) {
+        const textBlock = await textBlocks.nth(i).textContent();
+        if (textBlock === '' || textBlock === undefined || textBlock === null ) {
+            console.log('\x1b[31m', `text block ${i} is broken`);
+        }
+    }    
+});
+
+Then('just to flex list out all image icons by names', async function () {
+    const images = getPage().locator('.large-2 img');
+    const count = await images.count();
+    for (let i = 0; i < count; i++) {
+        const src = await images.nth(i).getAttribute('src');
+        if (src) {
+            const filename = src.split('/').pop();
+            if (filename === 'Original-Facebook-Geek-Profile-Avatar-1.jpg') {
+                console.log('Mario');
+            } else if (filename === 'Original-Facebook-Geek-Profile-Avatar-2.jpg') {
+                console.log('Bobba Fett');
+            } else if (filename === 'Original-Facebook-Geek-Profile-Avatar-3.jpg') {
+                console.log('Punisher');
+            } else if (filename === 'Original-Facebook-Geek-Profile-Avatar-5.jpg') {
+                console.log('Wolverine');
+            } else {
+                console.log('Storm Trooper');
+            }
+        }
+    }
+});
+
+//npx cucumber-js --name "Dynamic Content" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
