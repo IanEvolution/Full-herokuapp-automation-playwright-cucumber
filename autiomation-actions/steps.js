@@ -314,4 +314,45 @@ Then('just to flex list out all image icons by names', async function () {
     }
 });
 
-//npx cucumber-js --name "Dynamic Content" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+// Dynamic Controls -------------------------------------------------------------------------------------------------------------------------------
+
+Then('click on dynamic controls', async function () {
+    await getPage().getByRole('link', { name: 'Dynamic Controls' }).click();
+});
+
+Then('check for checkbox', async function () {
+    const checkbox = await getPage().locator('#checkbox').textContent();
+    assert.strictEqual(checkbox.trim(), 'A checkbox');
+});
+
+Then('remove checkbox', async function () {
+    await getPage().getByRole('button', { name: 'Remove' }).click();
+});
+
+Then('assert for {string} dc', async function (expectedMessage) {
+    await getPage().locator('#message').waitFor({ state: 'visible' });
+    const itsGone = await getPage().locator('#message').textContent();
+    assert.strictEqual(itsGone, expectedMessage);
+});
+
+Then('enable the enable', async function () {
+    await getPage().getByRole('button', { name: 'Enable' }).click();
+});
+
+Then('assert for status enabled {string} dc', async function (expectedMessage) {
+    await getPage().locator('#message').waitFor({ state: 'visible' });
+    const itsEnabled = await getPage().locator('#message').textContent();
+    assert.strictEqual(itsEnabled, expectedMessage);
+});
+
+Then('disable for disable', async function () {
+    await getPage().getByRole('button', { name: 'Disable' }).click();
+});
+
+Then('assert for status disabled {string} dc', async function (expectedMessage) {
+    await getPage().locator('#message').waitFor({ state: 'visible' });
+    const itsDisabled = await getPage().locator('#message').textContent();
+    assert.strictEqual(itsDisabled, expectedMessage);
+});
+
+//npx cucumber-js --name "Dynamic Controls" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty

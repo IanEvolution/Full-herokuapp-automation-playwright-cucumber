@@ -84,8 +84,20 @@ Feature: Herokuapp Feature
     Then check for broken text
     Then just to flex list out all image icons by names 
 
-    # Scenario: Dynamic Controls
+#--------------------------------------------------------------------
+    Scenario: Dynamic Controls checkbox
+    Then click on dynamic controls
+    Then check for checkbox
+    Then remove checkbox
+    Then assert for "It's gone!" dc
 
+    Scenario: Dynamic Controls enableDisable
+    Then click on dynamic controls
+    Then enable the enable
+    Then assert for status enabled "It's enabled!" dc
+    Then disable for disable
+    Then assert for status disabled "It's disabled!" dc
+#--------------------------------------------------------------------
 
     # Scenario: Dynamic Loading
 
