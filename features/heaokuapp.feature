@@ -99,6 +99,7 @@ Feature: Herokuapp Feature
     Then assert for status disabled "It's disabled!" dc
 #--------------------------------------------------------------------
 
+#--------------------------------------------------------------------
     Scenario: Dynamic Loading hidden
     Then click on dynamic Loading
     Then click on hidden Link
@@ -110,19 +111,28 @@ Feature: Herokuapp Feature
     Then click on the rendered Link
     Then click the start button on the dynamic load
     Then assert for the dynamic load "Hello World!" to appear
+#--------------------------------------------------------------------
 
+    Scenario: Entry Ad
+    Then click on entry ad
+    Then assert that the modal window appeared
+    Then close the modal
+    Then reclick the modal activate
+    Then assert that the modal window appeared
 
-    # Scenario: Entry Ad
+    Scenario: Exit Intent
+    Then click exit Intent
+    Then mouse out and assert for the modal
 
+    Scenario: File Download
+    Then click on file download
+    Then click on the logo.png and assert for file Downloaded
 
-    # Scenario: Exit Intent
-
-
-    # Scenario: File Download
-
-
-    # Scenario: File Upload
-
+    Scenario: File Upload
+    Then click file Upload
+    Then upload the logo.png file
+    Then click the upload button 
+    Then assert for txt that "File Uploaded!" and "logo.png" in the results screen
 
     # Scenario: Floating Menu
 

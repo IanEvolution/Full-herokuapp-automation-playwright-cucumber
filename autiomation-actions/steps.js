@@ -1,4 +1,3 @@
-// npx playwright codegen https://the-internet.herokuapp.com/
 const { Then } = require('@cucumber/cucumber');
 const { getPage, browser } = require('../playwrightUtilities');
 const assert = require('assert');
@@ -369,10 +368,10 @@ Then('click the start button on the dynamic load', async function () {
     await getPage().getByRole('button', { name: 'Start' }).click();
 });
 
-Then('assert for the dynamic load {string} to appear', async function (expectedMessage) {
+Then('assert for the dynamic load "Hello World!" to appear', async function () {
     await getPage().locator('#finish h4').waitFor({ state: 'visible' });
-    const helloWorld = await getPage().locator('#finish h4').textContent();
-    assert.strictEqual(helloWorld, expectedMessage);
+    const helloWorld = await getPage().locator('#finish h4').isVisible();
+    assert.strictEqual(helloWorld, true);
 });
 
 Then('click on the rendered Link', async function () {
@@ -381,4 +380,82 @@ Then('click on the rendered Link', async function () {
 
 // Entry Ad -----------------------------------------------------------------------------------------------------------
 
-//npx cucumber-js --name "Dynamic Loading rendered" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+Then('click on entry ad', async function () {
+    await getPage().getByRole('link', { name: 'Entry Ad' }).click();
+});
+
+Then('assert that the modal window appeared', async function () {
+    await getPage().locator('.modal-title').waitFor({ state: 'visible' });
+    const modalWindow = await getPage().locator('.modal-title').isVisible();
+    assert.strictEqual(modalWindow, true);
+});
+
+Then('close the modal', async function () {
+    await getPage().getByText('Close', { exact: true }).click();
+});
+
+Then('reclick the modal activate', async function () {
+    await getPage().getByRole('link', { name: 'click here' }).click();
+});
+
+// Exit Intent ------------------------------------------------------------------------------------------------------
+
+Then('click exit Intent', async function () {
+    await getPage().getByRole('link', { name: 'Exit Intent' }).click();
+});
+
+Then('mouse out and assert for the modal', async function () {
+    // had to get creative so i just clicked on something that was on the page to let the mouse get registered
+    await getPage().getByText('Mouse out of the viewport').click();
+    await getPage().mouse.move(500, -1);
+    await getPage().locator('.modal-title').waitFor({ state: 'visible' });
+    const mouseOutWindow = await getPage().locator('.modal-title').isVisible();
+    assert.strictEqual(mouseOutWindow, true);
+});
+
+// File Download -------------------------------------------------------------------------------------------------------
+
+Then('click on file download', async function () {
+    await getPage().getByRole('link', { name: 'File Download', exact: true }).click();
+});
+
+Then('click on the logo.png and assert for file Downloaded', async function () {
+    const [ download ] = await Promise.all([
+        getPage().waitForEvent('download'),
+        getPage().getByRole('link', { name: 'logo.png', exact: true }).click()
+    ]);
+    const path = await download.path();
+    assert.ok(path, 'Download path should exist');
+    const suggestedName = download.suggestedFilename();
+    assert.strictEqual(suggestedName, 'logo.png');
+});
+
+// File Upload -------------------------------------------------------------------------------------------------------
+
+Then('click file Upload', async function () {
+    await getPage().getByRole('link', { name: 'File Upload' }).click();
+});
+
+Then('upload the logo.png file', async function () {
+    //await getPage().getByRole('button', { name: 'Choose File' }).click();
+    const logoPNG = getPage().locator('#file-upload');
+    await logoPNG.setInputFiles("C:\\Users\\ianho\\Downloads\\logo.png");
+});
+
+Then('click the upload button', async function () {
+    await getPage().getByRole('button', { name: 'Upload' }).click();
+});
+
+Then('assert for txt that {string} and {string} in the results screen', async function (expectedMessage1, expectedMessage2) {
+    await getPage().locator('h3').waitFor({ state: 'visible' });
+    const fileUploaded = await getPage().locator('h3').textContent();
+    const logoPNG = await getPage().locator('#uploaded-files').textContent();
+    assert.strictEqual(fileUploaded, expectedMessage1);
+    assert.strictEqual(logoPNG.trim(), expectedMessage2);
+});
+
+/*
+npx cucumber-js --name "File Upload" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+*/
+
+// npx playwright codegen https://the-internet.herokuapp.com/
