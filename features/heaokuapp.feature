@@ -99,7 +99,17 @@ Feature: Herokuapp Feature
     Then assert for status disabled "It's disabled!" dc
 #--------------------------------------------------------------------
 
-    # Scenario: Dynamic Loading
+    Scenario: Dynamic Loading hidden
+    Then click on dynamic Loading
+    Then click on hidden Link
+    Then click the start button on the dynamic load
+    Then assert for the dynamic load "Hello World!" to appear
+
+    Scenario: Dynamic Loading rendered
+    Then click on dynamic Loading
+    Then click on the rendered Link
+    Then click the start button on the dynamic load
+    Then assert for the dynamic load "Hello World!" to appear
 
 
     # Scenario: Entry Ad

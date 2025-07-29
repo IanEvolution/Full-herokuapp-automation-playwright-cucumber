@@ -355,4 +355,30 @@ Then('assert for status disabled {string} dc', async function (expectedMessage) 
     assert.strictEqual(itsDisabled, expectedMessage);
 });
 
-//npx cucumber-js --name "Dynamic Controls" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+// Dynamic Loading --------------------------------------------------------------------------------------------------
+
+Then('click on dynamic Loading', async function () {
+    await getPage().getByRole('link', { name: 'Dynamic Loading' }).click();
+});
+
+Then('click on hidden Link', async function () {
+    await getPage().getByRole('link', { name: 'Example 1: Element on page' }).click();
+});
+
+Then('click the start button on the dynamic load', async function () {
+    await getPage().getByRole('button', { name: 'Start' }).click();
+});
+
+Then('assert for the dynamic load {string} to appear', async function (expectedMessage) {
+    await getPage().locator('#finish h4').waitFor({ state: 'visible' });
+    const helloWorld = await getPage().locator('#finish h4').textContent();
+    assert.strictEqual(helloWorld, expectedMessage);
+});
+
+Then('click on the rendered Link', async function () {
+    await getPage().getByRole('link', { name: 'Example 2: Element rendered' }).click();
+});
+
+// Entry Ad -----------------------------------------------------------------------------------------------------------
+
+//npx cucumber-js --name "Dynamic Loading rendered" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
