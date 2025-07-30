@@ -134,8 +134,31 @@ Feature: Herokuapp Feature
     Then click the upload button 
     Then assert for txt that "File Uploaded!" and "logo.png" in the results screen
 
-    # Scenario: Floating Menu
+#--------------------------------------------------------------------
+    Scenario: Floating Menu default
+    Then click on floating menu
+    Then assert for menu url to be defaut "https://the-internet.herokuapp.com/floating_menu"
 
+    Scenario: Floating Menu home
+    Then click on floating menu
+    Then click home tab in floating menu
+    Then assert for menu url to be home "https://the-internet.herokuapp.com/floating_menu#home"
+
+    Scenario: Floating Menu news
+    Then click on floating menu
+    Then click news tab in floating menu
+    Then assert for menu url to be news "https://the-internet.herokuapp.com/floating_menu#news"
+
+    Scenario: Floating Menu contact
+    Then click on floating menu
+    Then click contact tab in floating menu
+    Then assert for menu url to be contact "https://the-internet.herokuapp.com/floating_menu#contact"
+
+    Scenario: Floating Menu about
+    Then click on floating menu
+    Then click about tab in floating menu
+    Then assert for menu url to be about "https://the-internet.herokuapp.com/floating_menu#about"
+#--------------------------------------------------------------------
 
     # Scenario: Forgot Password
 
