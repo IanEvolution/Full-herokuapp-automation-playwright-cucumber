@@ -19,22 +19,43 @@ Feature: Herokuapp Feature
     Then login with admin creds
     Then check for congrats message
 
-    Scenario: Broken Images
+#--------------------------------------------------------------------
+    Scenario: Broken Images first image
     Then click on broken images
     Then wait to make sure then have time to load in
-    Then check for broken images
+    Then check for first broken image
+
+    Scenario: Broken Images second image
+    Then click on broken images
+    Then wait to make sure then have time to load in
+    Then check for second broken image
+
+    Scenario: Broken Images third image
+    Then click on broken images
+    Then wait to make sure then have time to load in
+    Then check for third broken image
+#--------------------------------------------------------------------
 
     Scenario: Challenging DOM
     Then click on chellenging dom
     Then read the diceret in row 4 i guess, should say Phaedrum3
 
-    Scenario: Checkboxes
+#--------------------------------------------------------------------
+    Scenario: Checkboxes round 1
     Then click on checkboxes
-    Then read the current state of the checkboxes
+    Then read the current state of the checkboxes round 1
+
+    Scenario: Checkboxes round 2
+    Then click on checkboxes
     Then click the check boxes
-    Then read the current state of the checkboxes
+    Then read the current state of the checkboxes round 2
+
+    Scenario: Checkboxes round 3
+    Then click on checkboxes
+    Then click the check boxes
     Then just reclick the first one for fun
-    Then read the current state of the checkboxes
+    Then read the current state of the checkboxes round 3
+#--------------------------------------------------------------------
 
     Scenario: Context Menu
     Then click on context menu
@@ -163,10 +184,28 @@ Feature: Herokuapp Feature
     # Scenario: Forgot Password
 
 
-    # Scenario: Form Authentication
+    Scenario: Form Authentication
+    Then click form authentication
+    Then enter the user and password incorrectly and click login
+    Then assert for the "Your password is invalid!" message on the form authentication
+    Then clear both fields and enter the user and password correctly this time
+    Then assert for the message "You logged into a secure area!" on the form authentication
 
+#--------------------------------------------------------------------
+    Scenario: Frames nested
+    Then click on frames
+    Then click on the nested link
+    Then assert that right frame says "RIGHT"
+    Then assert that left frame says "LEFT"
+    Then assert that middle frame says "MIDDLE"
+    Then assert that bottom frame says "BOTTOM"
 
-    # Scenario: Frames
+    Scenario: Frames iframe
+    Then click on frames
+    Then click on the iframe link
+    Then click the x on the pop up for fun
+    Then assert for thet text in the paragraph thing "Your content goes here."
+#--------------------------------------------------------------------
 
 
     # Scenario: Geolocation

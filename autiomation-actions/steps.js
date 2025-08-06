@@ -86,18 +86,27 @@ Then('wait to make sure then have time to load in', async function () {
     await getPage().waitForTimeout(1000);
 });
 
-Then('check for broken images', async function () {
-    const images = getPage().locator('.example img');
-    const count = await images.count();
-    console.log('');
-    for (let i = 0; i < count; i++) {
-        const image = await images.nth(i);
-        const width = await image.evaluate(img => img.naturalWidth)
-        if (width === 0) {
-            console.log('\x1b[31m%s\x1b[0m', `image: ${i + 1} is broken`);
-        }
-    }
+Then('check for first broken image', async function () {
+    const image = getPage().locator('.example img').nth(0);
+    const width = await image.evaluate(img => img.naturalWidth);
+    //console.log(width);
+    assert.strictEqual(width, 160);
 });
+
+Then('check for second broken image', async function () {
+    const image = getPage().locator('.example img').nth(1);
+    const width = await image.evaluate(img => img.naturalWidth);
+    assert.strictEqual(width, 160);
+    //console.log(width);
+});
+
+Then('check for third broken image', async function () {
+    const image = getPage().locator('.example img').nth(2);
+    const width = await image.evaluate(img => img.naturalWidth);
+    //console.log(width);
+    assert.strictEqual(width, 160);
+});
+
 
 // Challenging DOM ---------------------------------------------------------------------------------------------------------
 
@@ -117,14 +126,28 @@ Then('click on checkboxes', async function () {
     await getPage().getByRole('link', { name: 'Checkboxes' }).click();
 });
 
-Then('read the current state of the checkboxes', async function () {
-    const checkboxes = getPage().locator('#checkboxes input[type="checkbox"]');
-    const count = await checkboxes.count();
-    for (let i = 0; i < count; i++) {
-        const checkbox = checkboxes.nth(i);
-        const status = await checkbox.isChecked();
-        console.log(`checkbox ${i + 1} is ${status ? 'checked' : 'unchecked'}`);
-    }
+Then('read the current state of the checkboxes round 1', async function () {
+    const checkBoxes = getPage().locator('#checkboxes input[type="checkbox"]');
+    const checkBox1 = await checkBoxes.nth(0).isChecked();
+    const checkBox2 = await checkBoxes.nth(1).isChecked();
+    assert.strictEqual(checkBox1, false);
+    assert.strictEqual(checkBox2, true);
+});
+
+Then('read the current state of the checkboxes round 2', async function () {
+    const checkBoxes = getPage().locator('#checkboxes input[type="checkbox"]');
+    const checkBox1 = await checkBoxes.nth(0).isChecked();
+    const checkBox2 = await checkBoxes.nth(1).isChecked();
+    assert.strictEqual(checkBox1, true);
+    assert.strictEqual(checkBox2, false);
+});
+
+Then('read the current state of the checkboxes round 3', async function () {
+    const checkBoxes = getPage().locator('#checkboxes input[type="checkbox"]');
+    const checkBox1 = await checkBoxes.nth(0).isChecked();
+    const checkBox2 = await checkBoxes.nth(1).isChecked();
+    assert.strictEqual(checkBox1, false);
+    assert.strictEqual(checkBox2, false);
 });
 
 Then('click the check boxes', async function () {
@@ -207,7 +230,9 @@ Then('check and assert for portfolio tab', async function () {
 });
 
 Then('check and assert for gallery tab', async function () {
-    const galleryTab = await getPage().locator('ul li').nth(4).textContent();
+    const locator = getPage().locator('ul li').nth(4);
+    await locator.waitFor({ state: 'visible', timeout: 5000 });
+    const galleryTab = await locator.textContent();
     assert.strictEqual(galleryTab, 'Gallery');
 });
 
@@ -437,7 +462,7 @@ Then('click file Upload', async function () {
 });
 
 Then('upload the logo.png file', async function () {
-    //await getPage().getByRole('button', { name: 'Choose File' }).click();
+    await getPage().getByRole('button', { name: 'Choose File' }).click();
     const logoPNG = getPage().locator('#file-upload');
     await logoPNG.setInputFiles("C:\\Users\\ianho\\Downloads\\logo.png");
 });
@@ -502,8 +527,97 @@ Then('assert for menu url to be about {string}', async function (expectedUrl) {
 });
 
 
-/*
-npx cucumber-js --name "Floating Menu" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
-*/
+// Forgot Password -----------------------------------------------------------------------------------------------
 
-// npx playwright codegen https://the-internet.herokuapp.com/
+
+// Form authentication -------------------------------------------------------------------------------------------
+
+Then('click form authentication', async function () {
+    await getPage().getByRole('link', { name: 'Form Authentication' }).click();
+});
+
+Then('enter the user and password incorrectly and click login', async function () {
+    await getPage().locator('input[name="username"]').fill('tomsmith');
+    await getPage().locator('input[name="password"]').fill('blah');
+    await getPage().getByRole('button', { name: ' Login' }).click();
+});
+
+Then('assert for the {string} message on the form authentication', async function (expectedMessage) {
+    await getPage().locator('#flash').waitFor({ state: 'visible' });
+    const wrongLogin = await getPage().locator('#flash').textContent();
+    assert(wrongLogin.includes(expectedMessage)); 
+});
+
+Then('clear both fields and enter the user and password correctly this time', async function () {
+    await getPage().locator('input[name="username"]').clear();
+    await getPage().locator('input[name="password"]').clear();
+    await getPage().locator('input[name="username"]').fill('tomsmith');
+    await getPage().locator('input[name="password"]').fill('SuperSecretPassword!');
+    await getPage().getByRole('button', { name: ' Login' }).click();
+});
+
+Then('assert for the message {string} on the form authentication', async function (expectedMessage) {
+    await getPage().locator('#flash').waitFor({ state: 'visible' });
+    const successMessage = await getPage().locator('#flash').textContent();
+    assert(successMessage.includes(expectedMessage));
+});
+
+// Frames -------------------------------------------------------------------------------------------------------
+
+Then('click on frames', async function () {
+    await getPage().getByRole('link', { name: 'Frames', exact: true }).click();
+});
+
+Then('click on the nested link', async function () {
+    await getPage().getByRole('link', { name: 'Nested Frames' }).click();
+});
+
+Then('click on the iframe link', async function () {
+    await getPage().getByRole('link', { name: 'iFrame' }).click();
+});
+
+Then('assert that right frame says {string}', async function (expectedMessage) {
+    const rightFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-right"]').contentFrame().locator('body');
+    const rightText = await rightFrame.textContent();
+    assert.strictEqual(rightText.trim(), expectedMessage);
+});
+
+Then('assert that left frame says {string}', async function (expectedMessage) {
+    const leftFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-left"]').contentFrame().locator('body');
+    const leftText = await leftFrame.textContent();
+    assert.strictEqual(leftText.trim(), expectedMessage);
+});
+
+Then('assert that middle frame says {string}', async function (expectedMessage) {
+    const middleFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-middle"]').contentFrame().locator('body');
+    const middleText = await middleFrame.textContent();
+    assert.strictEqual(middleText.trim(), expectedMessage);
+});
+
+Then('assert that bottom frame says {string}', async function (expectedMessage){
+    const bottomFrame = await getPage().locator('frame[name="frame-bottom"]').contentFrame().locator('body');
+    const bottomText = await bottomFrame.textContent();
+    assert.strictEqual(bottomText.trim(), expectedMessage);
+});
+
+Then('click the x on the pop up for fun', async function () {
+    await getPage().getByRole('button', { name: 'Close' }).click();
+});
+
+Then('assert for thet text in the paragraph thing {string}', async function (expectedMessage) {
+    const paraFrame = await getPage().locator('iframe[title="Rich Text Area"]').contentFrame().locator('p');
+    const paraText = await paraFrame.textContent();
+    assert.strictEqual(paraText, expectedMessage);
+});
+
+/*
+npx cucumber-js --name "Checkboxes" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+
+npx playwright codegen https://the-internet.herokuapp.com/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+npx cucumber-js --parallel 32 --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+
+npx cucumber-js --format html:report.html --parallel 32 --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js
+*/
