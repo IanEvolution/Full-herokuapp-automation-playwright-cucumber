@@ -206,10 +206,13 @@ Feature: Herokuapp Feature
     Then click the x on the pop up for fun
     Then assert for thet text in the paragraph thing "Your content goes here."
 #--------------------------------------------------------------------
-
-
-    # Scenario: Geolocation
-
+    @geolocation
+    Scenario: Geolocation
+    Then click on Geolocation
+    Then click where am i
+    Then assert for latitude to be "44.97408" and longitude to be "-124.010496"
+    Then click see it on google
+    Then zoom out a bit and take a screen shot
 
     # Scenario: Horizontal Slider
 

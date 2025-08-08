@@ -446,7 +446,7 @@ Then('click on file download', async function () {
 
 Then('click on the logo.png and assert for file Downloaded', async function () {
     const [ download ] = await Promise.all([
-        getPage().waitForEvent('download'),
+        getPage().waitForEvent('download', { timeout: 5000 }),
         getPage().getByRole('link', { name: 'logo.png', exact: true }).click()
     ]);
     const path = await download.path();
@@ -610,8 +610,45 @@ Then('assert for thet text in the paragraph thing {string}', async function (exp
     assert.strictEqual(paraText, expectedMessage);
 });
 
+// Geolocation ------------------------------------------------------------------------------------------------------------------------------------------------
+// npx cucumber-js --tags "@geolocation" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+
+Then('click on Geolocation', async function () {
+    await this.page.getByRole('link', { name: 'Geolocation' }).click();
+});
+
+Then('click where am i', async function () {
+    await this.page.locator('button').click();
+});
+
+Then('assert for latitude to be {string} and longitude to be {string}', async function (expectedMessage1, expectedMessage2) {
+    const lat = await this.page.locator('#lat-value').textContent();
+    const long = await this.page.locator('#long-value').textContent();
+    assert.strictEqual(lat.trim(), expectedMessage1);
+    assert.strictEqual(long.trim(), expectedMessage2);
+});
+
+Then('click see it on google', async function () {
+    await this.page.locator('a[href="http://maps.google.com/?q=44.97408,-124.010496"]').click();
+});
+
+Then('zoom out a bit and take a screen shot', async function () {
+    const fs = require('fs');
+    const path = require('path');
+    const screenshotDir = path.resolve(__dirname, '../features/screenshots');
+    if (!fs.existsSync(screenshotDir)) {
+        fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+
+    const screenshotPath = path.join(screenshotDir, `geolocation_screenshot_${Date.now()}.png`);
+    await this.page.screenshot({ path: screenshotPath });
+});
+
+
+
+
 /*
-npx cucumber-js --name "Checkboxes" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Horizontal Slider" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 
