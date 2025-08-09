@@ -56,6 +56,15 @@ async function assertThatTheFramesAretheFrames (page, selector, expectedMessage)
   assert.strictEqual(text.trim(), expectedMessage);
 }
 
+async function clickTheMenu (page, tab) {
+  await page.getByRole('link', { name: `${tab}` }).click();
+}
+
+async function assertForTheFloatingMenuURL (page, expectedUrl) {
+  const floatingMenuURL = page.url();
+  assert.strictEqual(floatingMenuURL, expectedUrl);
+}
+
 async function moveSliderTo(page, selector, targetValue) {
   const slider = page.locator(selector);
   const box = await slider.boundingBox();
@@ -90,6 +99,8 @@ module.exports = {
   checkingTabsAreThereForDisappearingTabs,
   dropDownDupSolve,
   assertThatTheFramesAretheFrames,
+  clickTheMenu,
+  assertForTheFloatingMenuURL,
   moveSliderTo,
   hoverUsers
 };

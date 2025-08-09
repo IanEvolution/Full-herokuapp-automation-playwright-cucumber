@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs, dropDownDupSolve, assertThatTheFramesAretheFrames } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs, dropDownDupSolve, assertThatTheFramesAretheFrames, clickTheMenu, assertForTheFloatingMenuURL } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -463,42 +463,13 @@ Then('assert for menu url to be defaut {string}', async function (expectedUrl) {
     assert.strictEqual(defaultURL, expectedUrl);
 });
 
-Then('click home tab in floating menu', async function () {
-    await getPage().getByRole('link', { name: 'Home' }).click();
+Then('click {string} tab in floating menu', async function (tab) {
+    await clickTheMenu(getPage(), tab);
 });
 
-Then('assert for menu url to be home {string}', async function (expectedUrl) {
-    const homeURL = getPage().url();
-    assert.strictEqual(homeURL, expectedUrl);
+Then('assert for menu url to be {string}', async function (expectedUrl) {
+    await assertForTheFloatingMenuURL(getPage(), expectedUrl);
 });
-
-Then('click news tab in floating menu', async function () {
-    await getPage().getByRole('link', { name: 'News' }).click();
-});
-
-Then('assert for menu url to be news {string}', async function (expectedUrl) {
-    const newsURL = getPage().url();
-    assert.strictEqual(newsURL, expectedUrl);
-});
-
-Then('click contact tab in floating menu', async function () {
-    await getPage().getByRole('link', { name: 'Contact' }).click();
-});
-
-Then('assert for menu url to be contact {string}', async function (expectedUrl) {
-    const contactURL = getPage().url();
-    assert.strictEqual(contactURL, expectedUrl);
-});
-
-Then('click about tab in floating menu', async function () {
-    await getPage().getByRole('link', { name: 'About' }).click();
-});
-
-Then('assert for menu url to be about {string}', async function (expectedUrl) {
-    const aboutURL = getPage().url();
-    assert.strictEqual(aboutURL, expectedUrl);
-});
-
 
 // Forgot Password -----------------------------------------------------------------------------------------------
 
@@ -630,7 +601,7 @@ Then('hover over user {string} and assert for {string} for text and is visible',
 
 
 /*
-npx cucumber-js --name "Frames nested" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Floating Menu" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 
