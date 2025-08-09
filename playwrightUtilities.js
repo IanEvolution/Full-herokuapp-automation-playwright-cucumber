@@ -32,6 +32,9 @@ function getPage() {
   return page;
 }
 
+
+// all my public functions that i will be growing ----------------------------------------------------------------------------------------------------
+
 async function checkingTabsAreThereForDisappearingTabs(page, selector, index, expectedTab) {
   const tab = page.locator(selector).nth(index);
   await tab.waitFor({ state: 'visible', timeout: 5000 });
