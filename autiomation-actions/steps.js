@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser, moveSliderTo, hoverUsers } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -209,31 +209,8 @@ Then('click on disappearing elements', async function () {
     await getPage().getByRole('link', { name: 'Disappearing Elements' }).click();
 });
 
-Then('check and assert for home tab', async function () {
-    const homeTab = await getPage().locator('ul li').nth(0).textContent();
-    assert.strictEqual(homeTab, 'Home');
-});
-
-Then('check and assert for about tab', async function () {
-    const aboutTab = await getPage().locator('ul li').nth(1).textContent();
-    assert.strictEqual(aboutTab, 'About');
-});
-
-Then('check and assert for contact us tab', async function () {
-    const contactUsTab = await getPage().locator('ul li').nth(2).textContent();
-    assert.strictEqual(contactUsTab, 'Contact Us');
-});
-
-Then('check and assert for portfolio tab', async function () {
-    const portfolioTab = await getPage().locator('ul li').nth(3).textContent();
-    assert.strictEqual(portfolioTab, 'Portfolio');
-});
-
-Then('check and assert for gallery tab', async function () {
-    const locator = getPage().locator('ul li').nth(4);
-    await locator.waitFor({ state: 'visible', timeout: 5000 });
-    const galleryTab = await locator.textContent();
-    assert.strictEqual(galleryTab, 'Gallery');
+Then('check and assert for tab {int} to be {string} tab', async function (tabIndex, expectedTab) {
+    await checkingTabsAreThereForDisappearingTabs(getPage(), 'ul li', tabIndex - 1, expectedTab);
 });
 
 // Drag and Drop ---------------------------------------------------------------------------------------------------------------
@@ -671,7 +648,7 @@ Then('hover over user {string} and assert for {string} for text and is visible',
 
 
 /*
-npx cucumber-js --name "Hovers" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Disappearing Elements" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 

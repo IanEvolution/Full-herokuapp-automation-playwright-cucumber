@@ -66,25 +66,25 @@ Feature: Herokuapp Feature
     Then assert for "Congratulations! You must have the proper credentials."
 
 #--------------------------------------------------------------------
-    Scenario: Home tab is present
+    Scenario: Disappearing Elements home
     Then click on disappearing elements
-    Then check and assert for home tab
+    Then check and assert for tab 1 to be "Home" tab
 
-    Scenario: About tab is present
+    Scenario: Disappearing Elements about
     Then click on disappearing elements
-    Then check and assert for about tab
+    Then check and assert for tab 2 to be "About" tab
 
-    Scenario: Contact Us tab is present
+    Scenario: Disappearing Elements contact
     Then click on disappearing elements
-    Then check and assert for contact us tab
+    Then check and assert for tab 3 to be "Contact Us" tab
 
-    Scenario: Portfolio tab is present
+    Scenario: Disappearing Elements portfolio
     Then click on disappearing elements
-    Then check and assert for portfolio tab
+    Then check and assert for tab 4 to be "Portfolio" tab
 
-    Scenario: Gallery tab is present
+    Scenario: Disappearing Elements gallery 
     Then click on disappearing elements
-    Then check and assert for gallery tab
+    Then check and assert for tab 5 to be "Gallery" tab
 #--------------------------------------------------------------------
 
     Scenario: Drag and Drop

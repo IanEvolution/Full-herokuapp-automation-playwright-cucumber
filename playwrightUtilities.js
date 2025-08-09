@@ -32,6 +32,14 @@ function getPage() {
   return page;
 }
 
+async function checkingTabsAreThereForDisappearingTabs(page, selector, index, expectedTab) {
+  const tab = page.locator(selector).nth(index);
+  await tab.waitFor({ state: 'visible', timeout: 5000 });
+  const tabName = await tab.textContent();
+  const tabVisible = await tab.isVisible();
+  assert.strictEqual(tabName, expectedTab);
+  assert.strictEqual(tabVisible, true)
+}
 
 async function moveSliderTo(page, selector, targetValue) {
   const slider = page.locator(selector);
@@ -64,6 +72,7 @@ module.exports = {
   getPage,
   closeBrowser,
   browser: () => browser,
+  checkingTabsAreThereForDisappearingTabs,
   moveSliderTo,
   hoverUsers
 };
