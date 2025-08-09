@@ -206,6 +206,7 @@ Feature: Herokuapp Feature
     Then click the x on the pop up for fun
     Then assert for thet text in the paragraph thing "Your content goes here."
 #--------------------------------------------------------------------
+
     @geolocation
     Scenario: Geolocation
     Then click on Geolocation
@@ -214,9 +215,22 @@ Feature: Herokuapp Feature
     Then click see it on google
     Then zoom out a bit and take a screen shot
 
-    # Scenario: Horizontal Slider
+#--------------------------------------------------------------------
+    Scenario: Horizontal Slider 1
+    Then click on the horizontal Slider
+    Then slide the slider to "1"
+    Then assert for slider to be at "1"
 
+    Scenario: Horizontal Slider 3.5
+    Then click on the horizontal Slider
+    Then slide the slider to "3.5"
+    Then assert for slider to be at "3.5"
 
+    Scenario: Horizontal Slider 5
+    Then click on the horizontal Slider
+    Then slide the slider to "5"
+    Then assert for slider to be at "5"
+#--------------------------------------------------------------------
     # Scenario: Hovers
 
 

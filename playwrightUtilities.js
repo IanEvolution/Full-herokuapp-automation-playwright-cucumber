@@ -1,4 +1,3 @@
-
 const { chromium } = require('playwright');
 let browser = null;
 let page = null;
@@ -69,5 +68,21 @@ module.exports = {
   initializePage,
   getPage,
   closeBrowser,
-  browser: () => browser
+  browser: () => browser,
+  moveSliderTo
 };
+
+async function moveSliderTo(page, selector, targetValue) {
+  const slider = page.locator(selector);
+  const box = await slider.boundingBox();
+  const min = parseFloat(await slider.getAttribute('min'));
+  const max = parseFloat(await slider.getAttribute('max'));
+  const value = parseFloat(targetValue);
+  const percent =  (value - min) / (max - min);
+  const x = box.x + percent * box.width;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(box.x + 1, y);
+  await page.mouse.down();
+  await page.mouse.move(x, y, { steps: 10 });
+  await page.mouse.up();
+}

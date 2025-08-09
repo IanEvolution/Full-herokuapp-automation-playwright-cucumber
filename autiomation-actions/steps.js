@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -644,8 +644,20 @@ Then('zoom out a bit and take a screen shot', async function () {
     await this.page.screenshot({ path: screenshotPath });
 });
 
+// Horizonatal SLider ---------------------------------------------------------------------------------------------------------------------------------------
 
+Then('click on the horizontal Slider', async function () {
+    await getPage().getByRole('link', { name: 'Horizontal Slider' }).click();
+});
 
+Then('slide the slider to {string}', async function (targetValue) {
+    await moveSliderTo(getPage(), 'input[type="range"]', targetValue);
+});
+
+Then('assert for slider to be at {string}', async function (targetValue) {
+    const valueGathered = await getPage().locator('#range').textContent();
+    assert.strictEqual(valueGathered, targetValue);
+});
 
 /*
 npx cucumber-js --name "Horizontal Slider" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
