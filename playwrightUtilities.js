@@ -44,6 +44,18 @@ async function checkingTabsAreThereForDisappearingTabs(page, selector, index, ex
   assert.strictEqual(tabVisible, true)
 }
 
+async function dropDownDupSolve (page, expectedMessage) {
+  const landingValue = await page.locator('#dropdown').inputValue();
+  const landingText = await page.locator(`#dropdown option[value="${landingValue}"]`).textContent();
+  assert.strictEqual(landingText, expectedMessage);
+}
+
+async function assertThatTheFramesAretheFrames (page, selector, expectedMessage) {
+  const frame = await page.locator('frame[name="frame-top"]').contentFrame().locator(`frame[name="frame-${selector}"]`).contentFrame().locator('body');
+  const text = await frame.textContent();
+  assert.strictEqual(text.trim(), expectedMessage);
+}
+
 async function moveSliderTo(page, selector, targetValue) {
   const slider = page.locator(selector);
   const box = await slider.boundingBox();
@@ -76,6 +88,8 @@ module.exports = {
   closeBrowser,
   browser: () => browser,
   checkingTabsAreThereForDisappearingTabs,
+  dropDownDupSolve,
+  assertThatTheFramesAretheFrames,
   moveSliderTo,
   hoverUsers
 };

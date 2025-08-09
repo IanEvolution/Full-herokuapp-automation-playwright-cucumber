@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs, dropDownDupSolve, assertThatTheFramesAretheFrames } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -246,9 +246,7 @@ Then('click on Dropdown', async function () {
 });
 
 Then('assert for option {string} when page is first loaded in', async function (expectedMessage) {
-    const landingValue = await getPage().locator('#dropdown').inputValue();
-    const landingText = await getPage().locator(`#dropdown option[value="${landingValue}"]`).textContent();
-    assert.strictEqual(landingText, expectedMessage);
+    await dropDownDupSolve(getPage(), expectedMessage);
 });
 
 Then('select option 2', async function () {
@@ -256,9 +254,7 @@ Then('select option 2', async function () {
 });
 
 Then('assert for {string} being selected', async function (expectedMessage) {
-    const landingValue = await getPage().locator('#dropdown').inputValue();
-    const landingText = await getPage().locator(`#dropdown option[value="${landingValue}"]`).textContent();
-    assert.strictEqual(landingText, expectedMessage);
+    await dropDownDupSolve(getPage(), expectedMessage)
 });
 
 // Dynamic Content -------------------------------------------------------------------------------------------------------------
@@ -553,22 +549,8 @@ Then('click on the iframe link', async function () {
     await getPage().getByRole('link', { name: 'iFrame' }).click();
 });
 
-Then('assert that right frame says {string}', async function (expectedMessage) {
-    const rightFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-right"]').contentFrame().locator('body');
-    const rightText = await rightFrame.textContent();
-    assert.strictEqual(rightText.trim(), expectedMessage);
-});
-
-Then('assert that left frame says {string}', async function (expectedMessage) {
-    const leftFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-left"]').contentFrame().locator('body');
-    const leftText = await leftFrame.textContent();
-    assert.strictEqual(leftText.trim(), expectedMessage);
-});
-
-Then('assert that middle frame says {string}', async function (expectedMessage) {
-    const middleFrame = await getPage().locator('frame[name="frame-top"]').contentFrame().locator('frame[name="frame-middle"]').contentFrame().locator('body');
-    const middleText = await middleFrame.textContent();
-    assert.strictEqual(middleText.trim(), expectedMessage);
+Then('assert that {string} frame says {string}', async function (selector, expectedMessage) {
+    await assertThatTheFramesAretheFrames(getPage(), selector, expectedMessage);
 });
 
 Then('assert that bottom frame says {string}', async function (expectedMessage){
@@ -648,7 +630,7 @@ Then('hover over user {string} and assert for {string} for text and is visible',
 
 
 /*
-npx cucumber-js --name "Disappearing Elements" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Frames nested" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 

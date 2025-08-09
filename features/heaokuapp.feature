@@ -195,9 +195,9 @@ Feature: Herokuapp Feature
     Scenario: Frames nested
     Then click on frames
     Then click on the nested link
-    Then assert that right frame says "RIGHT"
-    Then assert that left frame says "LEFT"
-    Then assert that middle frame says "MIDDLE"
+    Then assert that "right" frame says "RIGHT"
+    Then assert that "left" frame says "LEFT"
+    Then assert that "middle" frame says "MIDDLE"
     Then assert that bottom frame says "BOTTOM"
 
     Scenario: Frames iframe
