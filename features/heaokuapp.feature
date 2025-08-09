@@ -231,8 +231,20 @@ Feature: Herokuapp Feature
     Then slide the slider to "5"
     Then assert for slider to be at "5"
 #--------------------------------------------------------------------
-    # Scenario: Hovers
 
+#--------------------------------------------------------------------
+    Scenario: Hovers user 1
+    Then click on the Hovers
+    Then hover over user "1" and assert for "name: user1" for text and is visible
+    
+    Scenario: Hovers user 2
+    Then click on the Hovers
+    Then hover over user "2" and assert for "name: user2" for text and is visible
+    
+    Scenario: Hovers user 3
+    Then click on the Hovers
+    Then hover over user "3" and assert for "name: user3" for text and is visible
+#--------------------------------------------------------------------
 
     # Scenario: Infinite Scroll
 

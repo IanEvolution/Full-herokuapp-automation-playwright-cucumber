@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser, moveSliderTo } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo, hoverUsers } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -659,8 +659,19 @@ Then('assert for slider to be at {string}', async function (targetValue) {
     assert.strictEqual(valueGathered, targetValue);
 });
 
+// Hovers ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Then('click on the Hovers', async function () {
+    await getPage().getByRole('link', { name: 'Hovers' }).click();
+});
+
+Then('hover over user {string} and assert for {string} for text and is visible', async function (userIndex, expectedUser) {
+    await hoverUsers(getPage(), '.figure', userIndex - 1, expectedUser);
+});
+
+
 /*
-npx cucumber-js --name "Horizontal Slider" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Hovers" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 

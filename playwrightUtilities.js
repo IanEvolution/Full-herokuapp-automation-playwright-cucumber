@@ -2,6 +2,7 @@ const { chromium } = require('playwright');
 let browser = null;
 let page = null;
 const DEFAULT_TIMEOUT = 30000;
+const assert = require('assert');
 
 async function initializeBrowser() {
   if (!browser) {
@@ -14,11 +15,6 @@ async function initializePage() {
     page = await browser.newPage();
     page.setDefaultTimeout(DEFAULT_TIMEOUT);
   }
-}
-
-function getPage() {
-  if (!page) throw new Error('Page has not been initialized. Please call initializePage first.');
-  return page;
 }
 
 async function closeBrowser() {
@@ -29,24 +25,6 @@ async function closeBrowser() {
   }
 }
 
-module.exports = { initializeBrowser, initializePage, getPage, closeBrowser };
-
-// Launches the browser if not already launched
-async function initializeBrowser() {
-  if (!browser) {
-    browser = await chromium.launch({ headless: false });
-  }
-}
-
-// Creates a new page if not already created
-async function initializePage() {
-  if (browser && !page) {
-    page = await browser.newPage();
-    page.setDefaultTimeout(DEFAULT_TIMEOUT);
-  }
-}
-
-// Returns the current page, throws error if not initialized
 function getPage() {
   if (!page) {
     throw new Error('Page has not been initialized. Please call initializePage first.');
@@ -54,23 +32,6 @@ function getPage() {
   return page;
 }
 
-// Closes the browser and resets browser/page variables
-async function closeBrowser() {
-  if (browser) {
-    await browser.close();
-    browser = null;
-    page = null;
-  }
-}
-
-module.exports = {
-  initializeBrowser,
-  initializePage,
-  getPage,
-  closeBrowser,
-  browser: () => browser,
-  moveSliderTo
-};
 
 async function moveSliderTo(page, selector, targetValue) {
   const slider = page.locator(selector);
@@ -86,3 +47,23 @@ async function moveSliderTo(page, selector, targetValue) {
   await page.mouse.move(x, y, { steps: 10 });
   await page.mouse.up();
 }
+
+async function hoverUsers(page, selector, index, expectedUser) {
+  const card = page.locator(selector).nth(index);
+  await card.locator('img[alt="User Avatar"]').hover();
+  await card.locator('h5').waitFor({ state: 'visible' });
+  const userVisible = await card.locator('h5').isVisible();
+  const userText = await card.locator('h5').textContent();
+  assert.strictEqual(userText, expectedUser);
+  assert.strictEqual(userVisible, true);
+}
+
+module.exports = {
+  initializeBrowser,
+  initializePage,
+  getPage,
+  closeBrowser,
+  browser: () => browser,
+  moveSliderTo,
+  hoverUsers
+};
