@@ -1,5 +1,5 @@
 const { Then } = require('@cucumber/cucumber');
-const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs, dropDownDupSolve, assertThatTheFramesAretheFrames, clickTheMenu, assertForTheFloatingMenuURL } = require('../playwrightUtilities');
+const { getPage, browser, moveSliderTo, hoverUsers, checkingTabsAreThereForDisappearingTabs, dropDownDupSolve, assertThatTheFramesAretheFrames, clickTheMenu, assertForTheFloatingMenuURL, scrollDown } = require('../playwrightUtilities');
 const assert = require('assert');
 const { get } = require('http');
 const { chromium } = require('playwright');
@@ -599,9 +599,36 @@ Then('hover over user {string} and assert for {string} for text and is visible',
     await hoverUsers(getPage(), '.figure', userIndex - 1, expectedUser);
 });
 
+// Infinite scroll -----------------------------------------------------------------------------------------------------------------------------------------
+
+Then('click on infinite Scroll', async function () {
+    await getPage().getByRole('link', { name: 'Infinite Scroll' }).click();
+});
+
+Then('get initial content count then scroll and see if new content loads', async function() {
+    const initialCount = await getPage().locator('.jscroll-added').count();
+    await scrollDown();
+    await getPage().waitForTimeout(1000);
+    const newCount = await getPage().locator('.jscroll-added').count();
+    assert(newCount > initialCount);
+});
+
+Then('assert that the next pragraph is not the same as any previous', async function () {
+    if (!this.paragraphs) {
+        this.paragraphs = [];
+    }
+    for (let i = 0; i < 5; i++) {
+        await scrollDown();
+        await getPage().waitForTimeout(1000);
+        const paragraphs = await getPage().locator('.jscroll-added').allTextContents();
+        const lastParagraph = paragraphs[paragraphs.length - 1];
+        assert(!this.paragraphs.includes(lastParagraph));
+        this.paragraphs.push(lastParagraph);
+    }
+});
 
 /*
-npx cucumber-js --name "Floating Menu" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "Infinite Scroll" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 

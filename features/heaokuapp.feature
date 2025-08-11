@@ -246,8 +246,13 @@ Feature: Herokuapp Feature
     Then hover over user "3" and assert for "name: user3" for text and is visible
 #--------------------------------------------------------------------
 
-    # Scenario: Infinite Scroll
+    Scenario: Infinite Scroll new content appears
+    Then click on infinite Scroll
+    Then get initial content count then scroll and see if new content loads
 
+    Scenario: Infinite Scroll no duplucate items
+    Then click on infinite Scroll
+    Then assert that the next pragraph is not the same as any previous
 
     # Scenario: Inputs
 

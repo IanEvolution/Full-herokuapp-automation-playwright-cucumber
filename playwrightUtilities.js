@@ -10,7 +10,7 @@ async function initializeBrowser() {
   }
 }
 
-async function initializePage() {
+async function initializePage () {
   if (browser && !page) {
     page = await browser.newPage();
     page.setDefaultTimeout(DEFAULT_TIMEOUT);
@@ -35,7 +35,7 @@ function getPage() {
 
 // all my public functions that i will be growing ----------------------------------------------------------------------------------------------------
 
-async function checkingTabsAreThereForDisappearingTabs(page, selector, index, expectedTab) {
+async function checkingTabsAreThereForDisappearingTabs (page, selector, index, expectedTab) {
   const tab = page.locator(selector).nth(index);
   await tab.waitFor({ state: 'visible', timeout: 5000 });
   const tabName = await tab.textContent();
@@ -90,6 +90,10 @@ async function hoverUsers(page, selector, index, expectedUser) {
   assert.strictEqual(userVisible, true);
 }
 
+async function scrollDown() {
+  await getPage().evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+}
+
 module.exports = {
   initializeBrowser,
   initializePage,
@@ -102,5 +106,6 @@ module.exports = {
   clickTheMenu,
   assertForTheFloatingMenuURL,
   moveSliderTo,
-  hoverUsers
+  hoverUsers,
+  scrollDown
 };
