@@ -246,6 +246,7 @@ Feature: Herokuapp Feature
     Then hover over user "3" and assert for "name: user3" for text and is visible
 #--------------------------------------------------------------------
 
+#--------------------------------------------------------------------
     Scenario: Infinite Scroll new content appears
     Then click on infinite Scroll
     Then get initial content count then scroll and see if new content loads
@@ -253,12 +254,25 @@ Feature: Herokuapp Feature
     Scenario: Infinite Scroll no duplucate items
     Then click on infinite Scroll
     Then assert that the next pragraph is not the same as any previous
+#--------------------------------------------------------------------
 
-    # Scenario: Inputs
+    Scenario: Inputs
+    Then click inputs
+    Then click the up arrow like 100 times
+    Then assert that the number reads 100
+    Then click the down arrow like 3 times
+    Then assert for the number to read 97
 
+    Scenario: JQuery UI Menus
+    Then click on JQuery ui menus
+    Then click on the PDF
 
-    # Scenario: JQuery UI Menus
-
+    Scenario: JQuery UI Menus 2
+    Then click on JQuery ui menus
+    Then click on the back to Jquery UI
+    Then assert for the text "JQuery UI"
+    Then click the menu link at the bottom
+    Then assert that you have returned to the main menu "JQueryUI - Menu"
 
     # Scenario: JavaScript Alerts
 

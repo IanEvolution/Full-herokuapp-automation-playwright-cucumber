@@ -472,7 +472,7 @@ Then('assert for menu url to be {string}', async function (expectedUrl) {
 });
 
 // Forgot Password -----------------------------------------------------------------------------------------------
-
+// N/A
 
 // Form authentication -------------------------------------------------------------------------------------------
 
@@ -627,8 +627,76 @@ Then('assert that the next pragraph is not the same as any previous', async func
     }
 });
 
+// Inputs -----------------------------------------------------------------------------------------------------------------------------------------------
+
+Then('click inputs', async function() {
+    await getPage().getByRole('link', { name: 'Inputs' }).click();
+});
+
+Then('click the up arrow like {int} times', async function (times) {
+    await getPage().locator('input[type="number"]').click();
+    for (let i = 0; i < times; i++){
+        await getPage().keyboard.press('ArrowUp');
+    }
+});
+
+Then('assert that the number reads {int}', async function (number) {
+    const numberToRead = await getPage().locator('input[type="number"]').evaluate(el => el.valueAsNumber);
+    assert.strictEqual(number, numberToRead);
+});
+
+Then('click the down arrow like {int} times', async function (times) {
+    await getPage().locator('input[type="number"]').click();
+    for (let i = 0; i < times; i++){
+        await getPage().keyboard.press('ArrowDown');
+    }
+});
+
+Then('assert for the number to read {int}', async function (number) {
+    const numberToRead = await getPage().locator('input[type="number"]').evaluate(el => el.valueAsNumber);
+    assert.strictEqual(number, numberToRead);
+});
+
+// JWuery UI Menus --------------------------------------------------------------------------------------------------------------------------------------
+
+Then('click on JQuery ui menus', async function () {
+    await getPage().getByRole('link', { name: 'JQuery UI Menus' }).click();
+});
+
+Then('click on the PDF', async function () {
+    await getPage().getByRole('link', { name: 'Enabled' }).hover();
+    await getPage().getByRole('link', { name: 'Downloads' }).hover();
+    await getPage().locator('a[href="/download/jqueryui/menu/menu.pdf"]').click();
+    await getPage().waitForTimeout(2000);
+});
+
+// JQuery UI Menus 2 -----------------------------------------------------------------------------------------------------------------------------------
+
+Then('click on the back to Jquery UI', async function () {
+    await getPage().getByRole('link', { name: 'Enabled' }).hover();
+    await getPage().locator('a[href="/jqueryui"]').click();
+});
+
+Then('assert for the text {string}', async function (expectedMessage) {
+    const actualMessage = await getPage().locator('h3').textContent();
+    assert.strictEqual(actualMessage, expectedMessage);
+});
+
+Then('click the menu link at the bottom', async function () {
+    await getPage().locator('a[href="/jqueryui/menu"]').click();
+});
+
+Then('assert that you have returned to the main menu {string}', async function (expectedMenuTitle) {
+    const menuTitle = await getPage().locator('h3').textContent();
+    assert.strictEqual(menuTitle, expectedMenuTitle);
+});
+
+// JavaScript Alerts ------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 /*
-npx cucumber-js --name "Infinite Scroll" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
+npx cucumber-js --name "JQuery UI Menus 2" --require autiomation-actions/hooks.js --require autiomation-actions/common.js --require autiomation-actions/steps.js --format pretty
 
 npx playwright codegen https://the-internet.herokuapp.com/
 
